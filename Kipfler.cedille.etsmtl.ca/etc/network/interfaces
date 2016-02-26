@@ -36,6 +36,6 @@ iface br1 inet static
 	post-up iptables -t nat -A POSTROUTING -s '10.8.8.0/24' -o br0 -j MASQUERADE
 	post-down iptables -t nat -D POSTROUTING -s '10.8.8.0/24' -o br0 -j MASQUERADE
 
-	# Example for port forward below
-	# post-up iptables -t nat -A PREROUTING -i br0 -p udp --dport 1194 -j DNAT --to 10.8.8.10:1194
-	# post-down iptables -t nat -D PREROUTING -i br0 -p udp --dport 1194 -j DNAT --to 10.8.8.10:1194
+	# Forward port 80 to reverse proxy
+	post-up iptables -t nat -A PREROUTING -i br0 -p tcp --dport 80 -j DNAT --to 10.8.8.1:80
+	post-down iptables -t nat -D PREROUTING -i br0 -p tcp --dport 80 -j DNAT --to 10.8.8.1:80
