@@ -1,0 +1,12 @@
+server {
+    listen 10.8.8.1:80;
+
+    server_name owncloud.cedille.etsmtl.ca;
+
+    location / {
+        proxy_pass       http://10.8.8.4;
+        proxy_set_header Host            $host;
+        proxy_set_header X-Forwarded-For $remote_addr;
+    }
+
+}
