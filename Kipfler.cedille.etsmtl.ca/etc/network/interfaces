@@ -1,0 +1,41 @@
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+source /etc/network/interfaces.d/*
+
+# Simple bridge setup for containers
+# Author: Justin Duplessis <jdupl@linux.com>
+# Written on: 2016-02-24
+
+auto lo
+iface lo inet loopback
+
+auto br0
+iface br0 inet static
+	address 142.137.247.121
+	netmask 255.255.255.0
+	network 142.137.247.0
+	broadcast 142.137.247.255
+	gateway 142.137.247.1
+	# dns-* options are implemented by the resolvconf package, if installed
+	dns-nameservers 8.8.8.8
+	dns-search etsmtl.ca
+	bridge_ports eth0
+	bridge_stp off
+	bridge_fd 0
+
+
+auto br1
+iface br1 inet static
+	address 10.8.8.254
+	netmask 255.255.255.0
+	bridge_ports none
+	bridge_stp off
+	bridge_fd 0
+	post-up echo 1 > /proc/sys/net/ipv4/ip_forward
+	post-up iptables -t nat -A POSTROUTING -s '10.8.8.0/24' -o br0 -j MASQUERADE
+	post-down iptables -t nat -D POSTROUTING -s '10.8.8.0/24' -o br0 -j MASQUERADE
+
+	# Example for port forward below
+	# post-up iptables -t nat -A PREROUTING -i br0 -p udp --dport 1194 -j DNAT --to 10.8.8.10:1194
+	# post-down iptables -t nat -D PREROUTING -i br0 -p udp --dport 1194 -j DNAT --to 10.8.8.10:1194
