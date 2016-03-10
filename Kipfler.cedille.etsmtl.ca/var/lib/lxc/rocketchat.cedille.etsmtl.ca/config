@@ -1,18 +1,15 @@
-# Template used to create this container: /usr/share/lxc/templates/lxc-debian
-# Parameters passed to the template: -r jessie
+# Template used to create this container: /usr/share/lxc/templates/lxc-ubuntu
+# Parameters passed to the template: -r trusty
 # For additional config options, please look at lxc.container.conf(5)
-lxc.network.type = empty
-lxc.rootfs = /var/lib/lxc/rocketchat.cedille.etsmtl.ca/rootfs
 
 # Common configuration
-lxc.include = /usr/share/lxc/config/debian.common.conf
+lxc.include = /usr/share/lxc/config/ubuntu.common.conf
 
 # Container specific configuration
+lxc.rootfs = /var/lib/lxc/rocketchat.cedille.etsmtl.ca/rootfs
 lxc.mount = /var/lib/lxc/rocketchat.cedille.etsmtl.ca/fstab
 lxc.utsname = rocketchat.cedille.etsmtl.ca
 lxc.arch = amd64
-lxc.autodev = 1
-lxc.kmsg = 0
 
 # Below is user defined config for network connectivity and autostart
 # Author: Justin Duplessis <jdupl@linux.com>
