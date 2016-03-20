@@ -36,6 +36,10 @@ iface br1 inet static
 	post-up iptables -t nat -A POSTROUTING -s '10.8.8.0/24' -o br0 -j MASQUERADE
 	post-down iptables -t nat -D POSTROUTING -s '10.8.8.0/24' -o br0 -j MASQUERADE
 
-	# Forward port 80 to reverse proxy
+	# Forward port TCP 80 to reverse proxy
 	post-up iptables -t nat -A PREROUTING -i br0 -p tcp --dport 80 -j DNAT --to 10.8.8.1:80
 	post-down iptables -t nat -D PREROUTING -i br0 -p tcp --dport 80 -j DNAT --to 10.8.8.1:80
+
+	# Forward port TCP 443 to reverse proxy
+	post-up iptables -t nat -A PREROUTING -i br0 -p tcp --dport 443 -j DNAT --to 10.8.8.1:443
+	post-down iptables -t nat -D PREROUTING -i br0 -p tcp --dport 443 -j DNAT --to 10.8.8.1:443
